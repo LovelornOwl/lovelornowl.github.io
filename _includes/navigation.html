@@ -11,19 +11,19 @@
 		<!--</li>-->
 		<li><a href="{{ site.url }}/posts/">All Posts</a></li>
 		<li><a href="{{ site.url }}/tags/">All Tags</a></li>
-		<li>
-			<a href="#">About</a>
-			<ul class="dl-submenu">
-				<li>
-					<img src="{{ site.owner.avatar }}" alt="{{ site.owner.name }} photo" class="author-photo">
-					<h4>{{ site.owner.name }}</h4>
-					<p>{{ site.owner.bio }}</p>
-				</li>
-				{% if site.owner.email %}<li>
-					<a href="mailto:{{ site.owner.email }}"><i class="fa fa-fw fa-envelope"></i> Email</a>
-				</li>{% endif %}
-			</ul>
-		</li>
+		<!--<li>-->
+		<!--	<a href="#">About</a>-->
+		<!--	<ul class="dl-submenu">-->
+		<!--		<li>-->
+		<!--			<img src="{{ site.owner.avatar }}" alt="{{ site.owner.name }} photo" class="author-photo">-->
+		<!--			<h4>{{ site.owner.name }}</h4>-->
+		<!--			<p>{{ site.owner.bio }}</p>-->
+		<!--		</li>-->
+		<!--		{% if site.owner.email %}<li>-->
+		<!--			<a href="mailto:{{ site.owner.email }}"><i class="fa fa-fw fa-envelope"></i> Email</a>-->
+		<!--		</li>{% endif %}-->
+		<!--	</ul>-->
+		<!--</li>-->
 		{% for link in site.data.navigation %}
 	    {% if link.url contains 'http' %}
 	        {% assign domain = '' %}
