@@ -1,18 +1,18 @@
-title:            Site Title
-description:      Describe your website here.
-disqus_shortname: 
+title:            LovelornOwl
+description:      This is a sad story.
+disqus_shortname: lovelornowl
 reading_time:     true
 words_per_minute: 200
 # Your site's domain goes here (eg: //mmistakes.github.io, http://mademistakes.com, etc)
 # When testing locally leave blank or use http://localhost:4000
-url:
+url: http://blog.lovelornowl.com
 
 # Owner/author information
 owner:
-  name:           Your Name
-  avatar:         avatar.jpg
+  name:           LovelornOwl
+  avatar:         https://dn-lovelornowl.qbox.me/logo.jpg
   bio:            "Your bio goes here. It shouldn't be super long but a good two sentences or two should suffice."
-  email:          you@email.com
+  email:          feihao@outlook.com
   # Social networking links used in footer. Update and remove as you like.
   twitter:        
   facebook:       
@@ -35,7 +35,7 @@ google_verify:
 bing_verify:         
 
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-timezone:    America/New_York
+timezone:    Asia/Chongqing
 future:      true
 highlighter: rouge
 markdown:    kramdown
