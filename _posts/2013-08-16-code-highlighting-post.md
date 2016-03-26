@@ -6,7 +6,7 @@ modified: 2016-02-01
 tags: [sample post, code, highlighting]
 image:
   feature: abstract-10.jpg
-  credit: dargadgetz
+  credit: 
   creditlink: http://www.dargadgetz.com/ios-7-abstract-wallpaper-pack-for-iphone-5-and-ipod-touch-retina/
 ---
 
