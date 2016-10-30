@@ -6,6 +6,20 @@ tags: [C++]
 
 ---
 
+该程序分为一个服务器端和多个客户端
+
+首先在服务端新建一个socket监听4869端口(为什么是4869?你猜![doge](../images/aru/111.png)),服务端拥有一个客户端向量保存多个来自客户端的连接,每当一个新的客户端连上服务端,就放到该向量里面,然后新开一个线程去处理该请求
+
+处理程序很简单,只需要每当有消息到达时就把该消息广播给客户端向量里面的所有客户端就行了
+
+客户端的话,也是先新建一个socket,然后连接到我们的服务端,每当用户输入消息就直接把它发送给服务端,再新开一个线程去处理服务端发来的消息
+
+在VS2015下面新建一个win32 console application,把代码直接复制进去就能运行了,运行结果如下图,从上到下分别为服务端,客户端1号,客户端2号
+
+![socket-chat](../images/socket-chat.png)
+
+服务端代码:
+
 ```c++
 #include "stdafx.h"
 #include <iostream>
@@ -17,7 +31,7 @@ tags: [C++]
 
 #pragma comment (lib, "Ws2_32.lib")
 
-#define IP_ADDRESS "192.168.1.141"
+#define IP_ADDRESS "192.168.1.141"//set this to your server ip
 #define DEFAULT_PORT "4869"
 #define BUFFER_SIZE 1024
 
@@ -29,7 +43,6 @@ struct ClientType {
 const char OPTION_VALUE = 1;
 const int MAX_CLIENTS = 5;
 
-//Function Prototypes
 int processClient(ClientType &newClient, std::vector<ClientType> &clientsArray, std::thread &thread);
 int main();
 
@@ -37,7 +50,6 @@ int processClient(ClientType &newClient, std::vector<ClientType> &clientsArray, 
 	std::string message = "";
 	char tempMessage[BUFFER_SIZE] = "";
 
-	//Session
 	while (1) {
 		memset(tempMessage, 0, BUFFER_SIZE);
 
@@ -50,7 +62,6 @@ int processClient(ClientType &newClient, std::vector<ClientType> &clientsArray, 
 
 				std::cout << message.c_str() << std::endl;
 
-				//Broadcast that message to the other clients
 				for (int i = 0; i < MAX_CLIENTS; i++) {
 					if (clientsArray[i].socket != INVALID_SOCKET)
 						if (newClient.id != i)
@@ -66,7 +77,6 @@ int processClient(ClientType &newClient, std::vector<ClientType> &clientsArray, 
 				closesocket(clientsArray[newClient.id].socket);
 				clientsArray[newClient.id].socket = INVALID_SOCKET;
 
-				//Broadcast the disconnection message to the other clients
 				for (int i = 0; i < MAX_CLIENTS; i++) {
 					if (clientsArray[i].socket != INVALID_SOCKET)
 						iResult = send(clientsArray[i].socket, message.c_str(), strlen(message.c_str()), 0);
@@ -75,7 +85,7 @@ int processClient(ClientType &newClient, std::vector<ClientType> &clientsArray, 
 				break;
 			}
 		}
-	} //end while
+	}
 
 	thread.detach();
 
@@ -93,32 +103,25 @@ int main() {
 	int tempId = -1;
 	std::thread myThreads[MAX_CLIENTS];
 
-	//Initialize Winsock
 	WSAStartup(MAKEWORD(2, 2), &wsaData);
 
-	//Setup hints
 	ZeroMemory(&hints, sizeof(hints));
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
 	hints.ai_flags = AI_PASSIVE;
 
-	//Setup Server
 	getaddrinfo(static_cast<PCSTR>(IP_ADDRESS), DEFAULT_PORT, &hints, &server);
 
-	//Create a listening socket for connecting to server
 	serverSocket = socket(server->ai_family, server->ai_socktype, server->ai_protocol);
 
-	//Setup socket options
 	setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &OPTION_VALUE, sizeof(int)); 
 	setsockopt(serverSocket, IPPROTO_TCP, TCP_NODELAY, &OPTION_VALUE, sizeof(int)); 
 	bind(serverSocket, server->ai_addr, (int)server->ai_addrlen);
 
-	//Listen for incoming connections.
 	std::cout << "Listening..." << std::endl;
 	listen(serverSocket, SOMAXCONN);
 
-	//Initialize the client list
 	for (int i = 0; i < MAX_CLIENTS; i++) {
 		client[i] = { -1, INVALID_SOCKET };
 	}
@@ -130,10 +133,8 @@ int main() {
 
 		if (incoming == INVALID_SOCKET) continue;
 
-		//Reset the number of clients
 		numberOfClients = -1;
 
-		//Create a temporary id for the next client
 		tempId = -1;
 		for (int i = 0; i < MAX_CLIENTS; i++) {
 			if (client[i].socket == INVALID_SOCKET && tempId == -1) {
@@ -145,16 +146,13 @@ int main() {
 			if (client[i].socket != INVALID_SOCKET)
 				numberOfClients++;
 
-			//std::cout << client[i].socket << std::endl;
 		}
 
 		if (tempId != -1) {
-			//Send the id to that client
 			std::cout << "Client #" << client[tempId].id << " Accepted" << std::endl;
 			message = std::to_string(client[tempId].id);
 			send(client[tempId].socket, message.c_str(), strlen(message.c_str()), 0);
 
-			//Create a thread process for that client
 			myThreads[tempId] = std::thread(processClient, std::ref(client[tempId]), std::ref(client), std::ref(myThreads[tempId]));
 		}
 		else {
@@ -164,17 +162,13 @@ int main() {
 		}
 	} //end while
 
-
-	  //Close listening socket
 	closesocket(serverSocket);
 
-	//Close client socket
 	for (int i = 0; i < MAX_CLIENTS; i++) {
 		myThreads[i].detach();
 		closesocket(client[i].socket);
 	}
 
-	//Clean up Winsock
 	WSACleanup();
 	std::cout << "Program has ended successfully" << std::endl;
 
@@ -182,6 +176,7 @@ int main() {
 	return 0;
 }
 ```
+客户端代码:
 
 ```c++
 #include "stdafx.h"
@@ -195,7 +190,7 @@ using namespace std;
 
 #pragma comment (lib, "Ws2_32.lib")
         
-#define IP_ADDRESS "192.168.1.141"
+#define IP_ADDRESS "192.168.1.141"//set this to your server ip
 #define DEFAULT_PORT "4869"
 #define BUFFER_SIZE 1024 
 
@@ -240,7 +235,6 @@ int main() {
 
 	cout << "Starting Client...\n";
 
-	// Initialize Winsock
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsadata);
 	if (iResult != 0) {
 		cout << "WSAStartup() failed with error: " << iResult << endl;
@@ -254,7 +248,6 @@ int main() {
 
 	cout << "Connecting...\n";
 
-	// Resolve the server address and port
 	iResult = getaddrinfo(static_cast<PCSTR>(IP_ADDRESS), DEFAULT_PORT, &hints, &result);
 	if (iResult != 0) {
 		cout << "getaddrinfo() failed with error: " << iResult << endl;
@@ -263,10 +256,8 @@ int main() {
 		return 1;
 	}
 
-	// Attempt to connect to an address until one succeeds
 	for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
 
-		// Create a SOCKET for connecting to server
 		client.socket = socket(ptr->ai_family, ptr->ai_socktype,
 							   ptr->ai_protocol);
 		if (client.socket == INVALID_SOCKET) {
@@ -276,7 +267,6 @@ int main() {
 			return 1;
 		}
 
-		// Connect to server.
 		iResult = connect(client.socket, ptr->ai_addr, (int)ptr->ai_addrlen);
 		if (iResult == SOCKET_ERROR) {
 			closesocket(client.socket);
@@ -297,7 +287,6 @@ int main() {
 
 	cout << "Successfully Connected" << endl;
 
-	//Obtain id from server for this client;
 	recv(client.socket, client.receivedMessage, BUFFER_SIZE, 0);
 	message = client.receivedMessage;
 
@@ -316,7 +305,6 @@ int main() {
 			}
 		}
 
-		//Shutdown the connection since no more data will be sent
 		my_thread.detach();
 	}
 	else
