@@ -1,6 +1,6 @@
-title:            LovelornOwl
+title:            Cyder
 description:      This is a sad story.
-disqus_shortname: lovelornowl
+disqus_shortname: cyder
 reading_time:     true
 words_per_minute: 200
 # Your site's domain goes here (eg: //mmistakes.github.io, http://mademistakes.com, etc)
@@ -9,7 +9,7 @@ url: http://blog.feihao.me/
 
 # Owner/author information
 owner:
-  name:           LovelornOwl
+  name:           Cyder
   avatar:         https://dn-lovelornowl.qbox.me/logo.jpg
   bio:            "Your bio goes here. It shouldn't be super long but a good two sentences or two should suffice."
   email:          feihao@outlook.com
