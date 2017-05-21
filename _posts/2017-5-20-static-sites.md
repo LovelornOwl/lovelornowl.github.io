@@ -217,21 +217,20 @@ layout: default
         <span class="post-meta">{{ post.date | date: date_format }}</span>
     
         <h2>
-          <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+          <!--<a class="post-link" href='{{ post.url | relative_url }}'>{{ post.title | escape }}</a>-->
         </h2>
       </li>
     {% endfor %}
   </ul>
 
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
+  <!--<p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>-->
 
 </div>
 
 ```
 
-```html
 Liquid使用** "{% %}" **作为循环，条件等逻辑语句的标记，而** "{{ }}" ** 作为变量替换的标记，**"|"**则为管道操作符,用来进行格式化操作
-```
+
 
 
 Liquid里面的变量来自于jekyll，可以参考[jekyll变量文档](https://jekyllrb.com/docs/variables/)
