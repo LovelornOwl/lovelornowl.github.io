@@ -200,7 +200,7 @@ jekyll使用了一种叫[Liquid](https://shopify.github.io/liquid/)的模版语�
 ---
 layout: default
 ---
-```html
+
 <div class="home">
 
   <h1 class="page-heading">Posts</h1>
