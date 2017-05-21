@@ -198,7 +198,7 @@ jekyll使用了一种叫[Liquid](https://shopify.github.io/liquid/)的模版语�
 
 打开minima主题文件夹中_layout文件夹里的home.html
 
-```html
+{% highlight html linenos %}
 
 ---
 layout: default
@@ -217,17 +217,18 @@ layout: default
         <span class="post-meta">{{ post.date | date: date_format }}</span>
     
         <h2>
-          <!--<a class="post-link" href='{{ post.url | relative_url }}'>{{ post.title | escape }}</a>-->
+          <a class="post-link" href='{{ post.url | relative_url }}'>{{ post.title | escape }}</a>
         </h2>
       </li>
     {% endfor %}
   </ul>
 
-  <!--<p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>-->
+  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
 
 </div>
 
-```
+{% endhighlight %}
+
 
 Liquid使用** "{% %}" **作为循环，条件等逻辑语句的标记，而** "{{ }}" ** 作为变量替换的标记，**"|"**则为管道操作符,用来进行格式化操作
 
