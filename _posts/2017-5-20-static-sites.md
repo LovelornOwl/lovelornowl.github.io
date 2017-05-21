@@ -199,6 +199,7 @@ jekyll使用了一种叫[Liquid](https://shopify.github.io/liquid/)的模版语�
 打开minima主题文件夹中_layout文件夹里的home.html
 
 ```html
+
 ---
 layout: default
 ---
@@ -225,6 +226,7 @@ layout: default
   <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
 
 </div>
+
 ```
 
 ```html
