@@ -4,4 +4,4 @@
 ![feihao.me](images/mysite.jpeg)
 
 
-## This is the source code of my blog, for more info please visit my personal site [feihao.me](https://feihao.me)
+## For more info, please contact me at [https://feihao.me](https://feihao.me/#contact)
